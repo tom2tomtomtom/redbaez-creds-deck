@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redbaez Credentials Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0A0A0A;
+  --accent: #E8683A;
+  --white: #FFFFFF;
+  --grey-100: #F5F5F5;
+  --grey-200: #E0E0E0;
+  --grey-400: #999999;
+  --grey-600: #666666;
+  --grey-800: #1A1A1A;
+  --grey-900: #111111;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Slide Container */
+.deck {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6vh 8vw;
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+  overflow-y: auto;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.slide.prev {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+
+/* Slide Counter */
+.slide-counter {
+  position: fixed;
+  bottom: 3vh;
+  right: 4vw;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--grey-600);
+  z-index: 100;
+  letter-spacing: 0.05em;
+}
+
+.slide-counter .current {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Navigation Arrows */
+.nav-arrows {
+  position: fixed;
+  bottom: 3vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+  z-index: 100;
+}
+
+.nav-arrows button {
+  background: none;
+  border: 1px solid var(--grey-600);
+  color: var(--grey-400);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-arrows button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Progress Bar */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--accent);
+  transition: width 0.4s ease;
+  z-index: 100;
+}
+
+/* Typography */
+h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.2rem;
+}
+
+h3 {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 0.8rem;
+  color: var(--accent);
+}
+
+p, li {
+  font-size: clamp(0.95rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--grey-200);
+  font-weight: 400;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  color: var(--grey-400);
+  font-weight: 400;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+.accent { color: var(--accent); }
+.dim { color: var(--grey-400); }
+.bright { color: var(--white); font-weight: 600; }
+
+/* Section Label */
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 2rem;
+  display: inline-block;
+  padding: 0.3em 0.8em;
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+}
+
+/* Stat Grid */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.stat {
+  padding: 0;
+}
+
+.stat .number {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.stat .label {
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  color: var(--grey-400);
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+/* Bullet List */
+.bullets {
+  list-style: none;
+  margin: 1rem 0;
+}
+
+.bullets li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+/* Quote Block */
+.quote {
+  border-left: 3px solid var(--accent);
+  padding: 1rem 0 1rem 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--grey-200);
+  font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+  line-height: 1.6;
+}
+
+.quote-author {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--grey-400);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+/* Product Grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+  margin: 1.5rem 0;
+}
+
+.product-card {
+  background: var(--grey-900);
+  border: 1px solid #222;
+  border-radius: 6px;
+  padding: 1.2rem;
+  transition: border-color 0.2s;
+}
+
+.product-card:hover {
+  border-color: var(--accent);
+}
+
+.product-card .name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--white);
+  margin-bottom: 0.3rem;
+}
+
+.product-card .desc {
+  font-size: 0.85rem;
+  color: var(--grey-400);
+  line-height: 1.4;
+}
+
+.product-card .tag {
+  font-size: 0.7rem;
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+/* Three Columns */
+.three-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.col {
+  padding: 1.5rem;
+  background: var(--grey-900);
+  border: 1px solid #222;
+  border-radius: 6px;
+}
+
+.col h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.6rem;
+}
+
+.col p {
+  font-size: 0.9rem;
+  color: var(--grey-400);
+}
+
+/* CTA Styles */
+.cta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.cta-card {
+  padding: 1.5rem;
+  background: var(--grey-900);
+  border: 1px solid #222;
+  border-radius: 6px;
+}
+
+.cta-card .step {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.cta-card h3 {
+  font-size: 1.1rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.cta-card p {
+  font-size: 0.9rem;
+  color: var(--grey-400);
+  line-height: 1.5;
+}
+
+/* Stream Pill */
+.streams {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
+}
+
+.stream-pill {
+  padding: 0.5rem 1.2rem;
+  border: 1px solid var(--grey-600);
+  border-radius: 3px;
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  font-weight: 500;
+  color: var(--grey-200);
+  letter-spacing: 0.03em;
+}
+
+/* Divider */
+.divider {
+  width: 60px;
+  height: 3px;
+  background: var(--accent);
+  margin: 1.5rem 0;
+}
+
+/* Contact Block */
+.contact-block {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #222;
+}
+
+.contact-block p {
+  font-size: 0.95rem;
+  color: var(--grey-400);
+  margin-bottom: 0.3rem;
+}
+
+.contact-block .name {
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* Two Column Layout */
+.two-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* API Endpoints */
+.endpoints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.endpoint {
+  font-family: 'Inter', monospace;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: var(--grey-900);
+  border: 1px solid #222;
+  padding: 0.3rem 0.7rem;
+  border-radius: 3px;
+  color: var(--accent);
+}
+
+/* Client Logos Bar */
+.client-bar {
+  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+  color: var(--grey-600);
+  font-weight: 400;
+  margin-top: 2rem;
+  letter-spacing: 0.02em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .slide { padding: 4vh 6vw; }
+  .two-cols { grid-template-columns: 1fr; gap: 1.5rem; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+  .product-grid { grid-template-columns: 1fr; }
+  .three-cols { grid-template-columns: 1fr; }
+  .cta-grid { grid-template-columns: 1fr; }
+  .nav-arrows button { width: 36px; height: 36px; }
+}
+
+@media (max-width: 480px) {
+  .slide { padding: 3vh 5vw; }
+  .stat-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .streams { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide active" data-slide="0">
+  <h1>Redbaez</h1>
+  <p class="subtitle">AI Partnership for Creative Agencies</p>
+  <div class="streams">
+    <span class="stream-pill">Consulting</span>
+    <span class="stream-pill">Platform</span>
+    <span class="stream-pill">Intelligence API</span>
+  </div>
+  <p class="client-bar">Working with Mother London, Uncommon Creative, Monigle, Alt-Shift, Collinson Group</p>
+</div>
+
+<!-- SLIDE 2: TOM HYDE -->
+<div class="slide" data-slide="1">
+  <span class="section-label">Founder</span>
+  <h2>Tom Hyde</h2>
+  <ul class="bullets">
+    <li><span class="bright">DDB</span> > <span class="bright">Meta</span> (9 years, creative agency partnerships APAC) > <span class="bright">Redbaez</span> (founded 2024)</li>
+    <li>30+ years across advertising, brand strategy, and technology. Cannes Gold Cyber Lion. Campaigns for Microsoft, Diageo, Western Union across London, Seoul, Melbourne.</li>
+    <li>Based in Melbourne. Clients in London, New York, Denver, Sydney.</li>
+  </ul>
+  <div class="quote">
+    "Tom has helped embed AI into our processes and culture, helping Monigle be on the leading edge in a fast-moving space."
+    <span class="quote-author">Gunnar Jacobs, Principal, Monigle</span>
+  </div>
+  <p class="dim" style="margin-top:1rem; font-size:0.95rem;">One of the rare people who understands business strategy AND can build the technology.</p>
+</div>
+
+<!-- SLIDE 3: THREE STREAMS -->
+<div class="slide" data-slide="2">
+  <span class="section-label">What We Offer</span>
+  <h2>Three Product Streams</h2>
+  <div class="three-cols">
+    <div class="col">
+      <h3>Stream 1: Consulting</h3>
+      <p>Embed AI into how your agency actually works. Four-month partnerships. 110+ custom tools built and deployed across five agencies.</p>
+    </div>
+    <div class="col">
+      <h3>Stream 2: AIDEN Platform</h3>
+      <p>10 AI tools for creative agencies. One token balance. Try any of them free at aiden.services.</p>
+    </div>
+    <div class="col">
+      <h3>Stream 3: Brain API</h3>
+      <p>License creative intelligence for your platform. 400+ phantom memories. The prefrontal cortex for LLMs.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: CONSULTING - WHAT WE DO -->
+<div class="slide" data-slide="3">
+  <span class="section-label">Stream 1: Consulting</span>
+  <h2>What We Do</h2>
+  <ul class="bullets">
+    <li>4-month embedded partnership: <span class="bright">Audit > Blueprint > Build > Compound</span></li>
+    <li><span class="accent">110+</span> custom Claude skills built and deployed</li>
+    <li><span class="accent">40%</span> production time reduction measured across five agencies</li>
+  </ul>
+  <div class="divider"></div>
+  <p style="color: var(--grey-200); font-size: clamp(0.95rem, 1.5vw, 1.15rem);">Not training. Not workshops with slides. Production tools your team uses every day.</p>
+</div>
+
+<!-- SLIDE 5: MOTHER LONDON -->
+<div class="slide" data-slide="4">
+  <span class="section-label">Case Study</span>
+  <h2>Mother London</h2>
+  <p class="subtitle">One of the world's most awarded agencies. 300+ people.</p>
+  <ul class="bullets">
+    <li>28 workstreams scoped across 6 departments</li>
+    <li>Brand compliance: <span class="accent">3 days to 3 hours</span></li>
+    <li>Production scoping automated across entire studio</li>
+    <li>Custom Claude workflows for strategy, creative, production, account management</li>
+    <li>SOW generator matching agency voice</li>
+  </ul>
+</div>
+
+<!-- SLIDE 6: UNCOMMON CREATIVE -->
+<div class="slide" data-slide="5">
+  <span class="section-label">Case Study</span>
+  <h2>Uncommon Creative Studio</h2>
+  <p class="subtitle">London's most talked-about agency. BA "A British Original" creators. 223 people.</p>
+  <ul class="bullets">
+    <li>Commercial dashboard: real-time sold vs allocated, parsing 40+ fee sheets</li>
+    <li>Float API integration for resource planning</li>
+    <li>Claude skills rollout for strategy and account management</li>
+    <li>Competitor audit tools with live ad library data</li>
+  </ul>
+  <div class="quote">
+    Live financial intelligence. Finance team went from manual spreadsheet reconciliation to automated reporting.
+  </div>
+</div>
+
+<!-- SLIDE 7: ALT-SHIFT -->
+<div class="slide" data-slide="6">
+  <span class="section-label">Case Study</span>
+  <h2>Alt-Shift</h2>
+  <p class="subtitle">43-person integrated PR and creative agency. Three Australian offices.</p>
+  <ul class="bullets">
+    <li>Opportunity intelligence: 8 signal types, daily 6am Slack alerts</li>
+    <li>Culture Wire: real-time cultural trend detection</li>
+    <li>Coverage tracking automation (Streem to client tracker)</li>
+    <li>Resource planning dashboard across 3 offices</li>
+  </ul>
+  <div class="stat-grid" style="margin-top:1.5rem;">
+    <div class="stat">
+      <div class="number">24-36</div>
+      <div class="label">hours freed per week</div>
+    </div>
+    <div class="stat">
+      <div class="number">1 FTE</div>
+      <div class="label">equivalent through AI automation alone</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: AIDEN PLATFORM OVERVIEW -->
+<div class="slide" data-slide="7">
+  <span class="section-label">Stream 2: AIDEN Platform</span>
+  <h2>AIDEN Platform</h2>
+  <p class="subtitle">10 AI tools for creative agencies. One token balance. Try any of them free.</p>
+  <p style="margin-top:0.5rem; color: var(--grey-400); font-size: 1rem;">aiden.services</p>
+</div>
+
+<!-- SLIDE 9: THE 10 TOOLS (part 1) -->
+<div class="slide" data-slide="8">
+  <span class="section-label">AIDEN Platform</span>
+  <h2>The 10 Tools</h2>
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="name">AIDEN Colleague</div>
+      <div class="desc">Dedicated AI partner trained on your agency's culture</div>
+      <div class="tag">Enterprise, custom pricing</div>
+    </div>
+    <div class="product-card">
+      <div class="name">AIDEN Chat</div>
+      <div class="desc">Strategic brainstorming with 400+ phantom perspectives</div>
+      <div class="tag">Included</div>
+    </div>
+    <div class="product-card">
+      <div class="name">Synthetic Research</div>
+      <div class="desc">Pressure-test concepts with 8 AI personas</div>
+      <div class="tag">From $49/mo</div>
+    </div>
+    <div class="product-card">
+      <div class="name">Brand Audit</div>
+      <div class="desc">Competitive intelligence across positioning, ads, digital in 15 minutes</div>
+      <div class="tag">Token-based</div>
+    </div>
+    <div class="product-card">
+      <div class="name">Listen</div>
+      <div class="desc">Cultural intelligence across 10 platforms</div>
+      <div class="tag">From $99/mo</div>
+    </div>
+    <div class="product-card">
+      <div class="name">Creative Pipeline</div>
+      <div class="desc">Generate social ad campaigns from a brief</div>
+      <div class="tag">Token-based</div>
+    </div>
+    <div class="product-card">
+      <div class="name">refrAIm</div>
+      <div class="desc">Reformat one video for every platform in 30 seconds</div>
+      <div class="tag">Token-based</div>
+    </div>
+    <div class="product-card">
+      <div class="name">Brief Sharpener</div>
+      <div class="desc">Paste a brief, scored on 7 dimensions, gaps surfaced</div>
+      <div class="tag">Token-based</div>
+    </div>
+    <div class="product-card">
+      <div class="name">Pitch</div>
+      <div class="desc">7-step campaign workflow from brief to deck</div>
+      <div class="tag">Token-based</div>
+    </div>
+    <div class="product-card">
+      <div class="name">Teach</div>
+      <div class="desc">AI tutoring that adapts to your learning style</div>
+      <div class="tag">Token-based</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: HOW AIDEN THINKS -->
+<div class="slide" data-slide="9">
+  <span class="section-label">AIDEN Platform</span>
+  <h2>How AIDEN Thinks</h2>
+  <div class="quote" style="border-left-color: var(--accent);">
+    "AIDEN cultivates hundreds of phantom memories from an agency's own culture, their documents, team interviews, ways of working and their second brain. Each time you talk to it, dozens of phantoms fire from over 400 distinct memories the system believes it has experienced in its long advertising career. When two phantoms collide on the same brief, the system uses the tension instead of resolving it. The interesting work comes from the friction, not the variety."
+  </div>
+  <div class="divider"></div>
+  <p style="font-size: clamp(1rem, 1.8vw, 1.3rem); color: var(--white); font-weight: 600; margin-bottom: 0.5rem;">LLMs are limbic. We added the prefrontal cortex.</p>
+  <p style="color: var(--grey-400);">Temperature adds randomness. This adds character.</p>
+</div>
+
+<!-- SLIDE 11: MONIGLE -->
+<div class="slide" data-slide="10">
+  <span class="section-label">Case Study</span>
+  <h2>Monigle</h2>
+  <p class="subtitle">Leading US brand consultancy. Denver and New York.</p>
+  <ul class="bullets">
+    <li>AI strategy embedded in processes and culture</li>
+    <li>Claude workflows for the growth team</li>
+    <li>Custom PPTX skill for branded presentations: 70+ slide types, exact design system compliance</li>
+  </ul>
+  <div class="quote">
+    "Tom has helped embed AI into our processes and culture, helping Monigle be on the leading edge in a fast-moving space."
+    <span class="quote-author">Gunnar Jacobs, Principal, Monigle</span>
+  </div>
+</div>
+
+<!-- SLIDE 12: COLLINSON GROUP -->
+<div class="slide" data-slide="11">
+  <span class="section-label">Case Study</span>
+  <h2>Collinson Group</h2>
+  <p class="subtitle">$2 billion loyalty and travel experience company. 2,300 staff.</p>
+  <ul class="bullets">
+    <li>Loyalty consulting AI transformation (GBP 75K Phase 1)</li>
+    <li>Signal intelligence: monitoring 32,000 companies for moments of risk</li>
+    <li>Proposal engine: auto-generating proposals in Collinson's voice</li>
+    <li>Loyalty health check: brands benchmark against 600+ programmes</li>
+  </ul>
+  <div class="quote">
+    "Consulting model faces obsolescence within 24 months. AI is the lifeline."
+    <span class="quote-author">Stephen Gilbert, VP Salesforce Loyalty, Collinson Group</span>
+  </div>
+</div>
+
+<!-- SLIDE 13: BRAIN API INTRO -->
+<div class="slide" data-slide="12">
+  <span class="section-label">Stream 3: Brain API</span>
+  <h2>The Brain API</h2>
+  <p class="subtitle">Your platform handles the interface. AIDEN handles the thinking.</p>
+  <ul class="bullets">
+    <li>For creative tool companies whose products are wrappers on ChatGPT or Claude</li>
+    <li>Plug AIDEN on top. Your output stops reading like generic AI.</li>
+  </ul>
+  <div class="divider"></div>
+  <p style="font-size: clamp(1rem, 1.6vw, 1.2rem); color: var(--white); font-weight: 500;">The prefrontal cortex for LLMs.</p>
+</div>
+
+<!-- SLIDE 14: WHAT IT DOES -->
+<div class="slide" data-slide="13">
+  <span class="section-label">Brain API</span>
+  <h2>What It Does</h2>
+  <ul class="bullets">
+    <li><span class="accent">400+</span> phantom memories that fire on every request</li>
+    <li>6-layer activation scoring, collision detection, conviction tiers</li>
+    <li>Evolves through use: feedback loop, quality scoring, phantom alliances</li>
+    <li>Sycophancy guardrail: structurally incapable of becoming a yes-machine</li>
+  </ul>
+  <h3 style="margin-top:1.5rem;">Endpoints</h3>
+  <div class="endpoints">
+    <span class="endpoint">/chat</span>
+    <span class="endpoint">/generate/strategy</span>
+    <span class="endpoint">/generate/territories</span>
+    <span class="endpoint">/generate/big-idea</span>
+    <span class="endpoint">/generate/copy-suite</span>
+    <span class="endpoint">/enhance-copy</span>
+  </div>
+</div>
+
+<!-- SLIDE 15: SPRINGBOARDS -->
+<div class="slide" data-slide="14">
+  <span class="section-label">Case Study</span>
+  <h2>Springboards.ai</h2>
+  <p class="subtitle">AI creativity platform. 120+ agency customers. $5M raised.</p>
+  <ul class="bullets">
+    <li>CTO and CEO testing AIDEN Brain API integration</li>
+    <li>Flint (their divergence model) + AIDEN Brain (creative judgement) = unique combination</li>
+    <li>Licensing model: flat annual fee + token cap</li>
+  </ul>
+  <div class="quote">
+    "If it improves quality, then everyone wins."
+    <span class="quote-author">Pip Bingemann, CEO, Springboards.ai</span>
+  </div>
+</div>
+
+<!-- SLIDE 16: INTEGRATION -->
+<div class="slide" data-slide="15">
+  <span class="section-label">Brain API</span>
+  <h2>Integration</h2>
+  <div class="three-cols">
+    <div class="col">
+      <h3>A) API Calls</h3>
+      <p>Your platform calls AIDEN, gets enhanced output. Simplest path.</p>
+    </div>
+    <div class="col">
+      <h3>B) Phantom Cultivation</h3>
+      <p>We train phantoms on your customers' data. Deep integration.</p>
+    </div>
+    <div class="col">
+      <h3>C) White-label</h3>
+      <p>AIDEN Brain runs under your brand. Full licensing.</p>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <p style="color: var(--grey-400); font-size: 0.95rem;">Python + TypeScript SDKs. Streaming + async. 15-minute integration.</p>
+</div>
+
+<!-- SLIDE 17: THE NUMBERS -->
+<div class="slide" data-slide="16">
+  <span class="section-label">Results</span>
+  <h2>The Numbers</h2>
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="number">5</div>
+      <div class="label">enterprise clients across UK, US, Australia</div>
+    </div>
+    <div class="stat">
+      <div class="number">110+</div>
+      <div class="label">custom tools in production</div>
+    </div>
+    <div class="stat">
+      <div class="number">400+</div>
+      <div class="label">phantom memories</div>
+    </div>
+    <div class="stat">
+      <div class="number">40%</div>
+      <div class="label">average production time reduction</div>
+    </div>
+    <div class="stat">
+      <div class="number">10</div>
+      <div class="label">SaaS products shipped and live</div>
+    </div>
+    <div class="stat">
+      <div class="number">214</div>
+      <div class="label">tests, 94 files. Brain API ready for licensing.</div>
+    </div>
+  </div>
+  <div class="quote" style="margin-top: 2rem;">
+    "AIDEN brings something rare to creative partnerships. Genuine creative judgement and the confidence to defend it."
+    <span class="quote-author">Agency CEO</span>
+  </div>
+</div>
+
+<!-- SLIDE 18: CTA -->
+<div class="slide" data-slide="17">
+  <h2>Three Ways to Work With Us</h2>
+  <div class="cta-grid">
+    <div class="cta-card">
+      <div class="step">Option 1</div>
+      <h3>Consulting</h3>
+      <p>Embed AI in your agency. From GBP 68K year one. Four-month partnership, production tools from day one.</p>
+    </div>
+    <div class="cta-card">
+      <div class="step">Option 2</div>
+      <h3>Platform</h3>
+      <p>Try AIDEN tools free. 10 tokens on us. Start at aiden.services.</p>
+    </div>
+    <div class="cta-card">
+      <div class="step">Option 3</div>
+      <h3>Brain API</h3>
+      <p>License creative intelligence for your platform. Contact us for pricing.</p>
+    </div>
+  </div>
+  <div class="contact-block">
+    <p><span class="name">Tom Hyde</span> | tomh@redbaez.com | +61 403 920 369</p>
+    <p><span class="name">Chris Maples</span> | chrism@redbaez.com | UK/EU</p>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div class="nav-arrows">
+  <button id="prevBtn" aria-label="Previous slide">&#8592;</button>
+  <button id="nextBtn" aria-label="Next slide">&#8594;</button>
+</div>
+<div class="slide-counter">
+  <span class="current" id="currentSlide">1</span> / <span id="totalSlides">18</span>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  const currentEl = document.getElementById('currentSlide');
+  const totalEl = document.getElementById('totalSlides');
+  const progressBar = document.getElementById('progressBar');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  totalEl.textContent = total;
+
+  function goTo(index) {
+    if (isAnimating || index === current || index < 0 || index >= total) return;
+    isAnimating = true;
+
+    const direction = index > current ? 1 : -1;
+    const oldSlide = slides[current];
+    const newSlide = slides[index];
+
+    oldSlide.classList.remove('active');
+    oldSlide.classList.add(direction > 0 ? 'prev' : '');
+    if (direction < 0) {
+      oldSlide.style.transform = 'translateX(60px)';
+    }
+
+    newSlide.classList.remove('prev');
+    newSlide.classList.add('active');
+
+    current = index;
+    currentEl.textContent = current + 1;
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+
+    setTimeout(function() {
+      isAnimating = false;
+      slides.forEach(function(s, i) {
+        if (i !== current) {
+          s.classList.remove('active', 'prev');
+          s.style.transform = '';
+        }
+      });
+    }, 500);
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      next();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      prev();
+    }
+  });
+
+  // Click navigation
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  // Touch/Swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) next();
+      else prev();
+    }
+  }, { passive: true });
+
+  // Click on slide area (not on buttons/links) advances
+  document.getElementById('deck').addEventListener('click', function(e) {
+    if (e.target.closest('.nav-arrows') || e.target.closest('a') || e.target.closest('button')) return;
+    const x = e.clientX;
+    if (x > window.innerWidth * 0.5) next();
+    else prev();
+  });
+
+  // Initial state
+  progressBar.style.width = (1 / total * 100) + '%';
+})();
+</script>
+
+</body>
+</html>
