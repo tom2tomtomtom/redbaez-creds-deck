@@ -454,20 +454,31 @@ p, li {
 
 .slide.hero-slide {
   background: var(--bg);
+  overflow: hidden;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(0.8rem, 1.5vh, 1.4rem);
+  padding: 4vh 8vw;
 }
 
-.slide.hero-slide > * {
+.slide.hero-slide > *:not(canvas) {
   position: relative;
   z-index: 1;
+  margin: 0;
 }
 
-/* Brand logo on title slide */
-.brand-logo {
-  width: clamp(72px, 7vw, 110px);
+/* Brand logo wordmark — replaces "Redbaez" headline */
+.brand-logo-mark {
+  width: clamp(180px, 22vw, 320px);
+  max-width: 90%;
   height: auto;
   display: block;
-  margin: 0 0 2rem;
-  filter: drop-shadow(0 0 24px var(--accent-glow));
+  filter: drop-shadow(0 0 28px var(--accent-glow));
+}
+
+.slide.hero-slide .subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  color: var(--grey-200);
 }
 
 /* Pill CTA button — matches redbaez.com .cta-primary */
@@ -534,7 +545,6 @@ p, li {
 
 /* Client logo strip on title slide */
 .client-logos-strip {
-  margin-top: 1.8rem;
   max-width: 640px;
   width: 80%;
   max-height: clamp(36px, 5vh, 56px);
@@ -572,7 +582,7 @@ p, li {
 <!-- SLIDE 1: TITLE -->
 <div class="slide active hero-slide" data-slide="0">
   <canvas class="hero-canvas" id="heroCanvas"></canvas>
-  <h1>Redbaez</h1>
+  <img class="brand-logo-mark" src="https://res.cloudinary.com/dkl8kiemy/image/upload/redbaez_logo_rxrjfp.png" alt="Redbaez">
   <p class="subtitle">AI Partnership for Creative Agencies</p>
   <div class="streams">
     <span class="stream-pill">Consulting</span>
