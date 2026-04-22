@@ -1058,7 +1058,7 @@ p, li {
   }
   updateTicks();
 
-  function goTo(index) {
+  function goTo(index, pushHistory) {
     if (isAnimating || index === current || index < 0 || index >= total) return;
     isAnimating = true;
 
@@ -1067,8 +1067,9 @@ p, li {
     const newSlide = slides[index];
 
     oldSlide.classList.remove('active');
-    oldSlide.classList.add(direction > 0 ? 'prev' : '');
-    if (direction < 0) {
+    if (direction > 0) {
+      oldSlide.classList.add('prev');
+    } else {
       oldSlide.style.transform = 'translateX(60px)';
     }
 
@@ -1078,6 +1079,10 @@ p, li {
     current = index;
     currentEl.textContent = current + 1;
     updateTicks();
+
+    if (pushHistory !== false) {
+      history.pushState({ slide: index }, '', '#slide-' + (index + 1));
+    }
 
     setTimeout(function() {
       isAnimating = false;
@@ -1092,6 +1097,21 @@ p, li {
 
   function next() { goTo(current + 1); }
   function prev() { goTo(current - 1); }
+
+  // Browser back/forward — navigate without pushing new entry
+  window.addEventListener('popstate', function(e) {
+    const target = (e.state && typeof e.state.slide === 'number')
+      ? e.state.slide
+      : slideFromHash();
+    if (target !== current) goTo(target, false);
+  });
+
+  function slideFromHash() {
+    const m = window.location.hash.match(/^#slide-(\d+)$/);
+    if (!m) return 0;
+    const n = parseInt(m[1], 10) - 1;
+    return (n >= 0 && n < total) ? n : 0;
+  }
 
   // Keyboard
   document.addEventListener('keydown', function(e) {
@@ -1134,6 +1154,16 @@ p, li {
     else prev();
   });
 
+  // Honour deep-link on first load (e.g. ?#slide-5)
+  const initial = slideFromHash();
+  history.replaceState({ slide: initial }, '', '#slide-' + (initial + 1));
+  if (initial !== 0) {
+    slides[0].classList.remove('active');
+    slides[initial].classList.add('active');
+    current = initial;
+    currentEl.textContent = initial + 1;
+    updateTicks();
+  }
 })();
 
 // Hero particle canvas (matches redbaez.com)
