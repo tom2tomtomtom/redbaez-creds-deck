@@ -11,8 +11,10 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg: #0A0A0A;
-  --accent: #E8683A;
+  --bg: #140205;
+  --black: #0A0A0A;
+  --accent: #FF3333;
+  --accent-glow: rgba(255, 51, 51, 0.35);
   --white: #FFFFFF;
   --grey-100: #F5F5F5;
   --grey-200: #E0E0E0;
@@ -27,7 +29,7 @@ html, body {
   overflow: hidden;
   background: var(--bg);
   color: var(--white);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -126,18 +128,18 @@ html, body {
   z-index: 100;
 }
 
-/* Typography */
+/* Typography — matches redbaez.com */
 h1 {
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  font-weight: 800;
-  line-height: 1.05;
+  font-size: clamp(3.6rem, 9vw, 7rem);
+  font-weight: 900;
+  line-height: 0.95;
   letter-spacing: -0.03em;
   margin-bottom: 1.5rem;
 }
 
 h2 {
-  font-size: clamp(1.8rem, 4vw, 3.2rem);
-  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin-bottom: 1.2rem;
@@ -145,7 +147,7 @@ h2 {
 
 h3 {
   font-size: clamp(1.1rem, 2vw, 1.5rem);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.2;
   margin-bottom: 0.8rem;
   color: var(--accent);
@@ -197,11 +199,12 @@ p, li {
 }
 
 .stat .number {
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 800;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 900;
   color: var(--accent);
   line-height: 1;
   margin-bottom: 0.3rem;
+  letter-spacing: -0.03em;
 }
 
 .stat .label {
@@ -438,6 +441,110 @@ p, li {
   letter-spacing: 0.02em;
 }
 
+/* Hero particle canvas (slide 1) */
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.slide.hero-slide {
+  background: var(--bg);
+}
+
+.slide.hero-slide > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Brand logo on title slide */
+.brand-logo {
+  width: clamp(72px, 7vw, 110px);
+  height: auto;
+  display: block;
+  margin: 0 0 2rem;
+  filter: drop-shadow(0 0 24px var(--accent-glow));
+}
+
+/* Pill CTA button — matches redbaez.com .cta-primary */
+.cta-pill {
+  display: inline-block;
+  padding: 0.9rem 2.4rem;
+  background: var(--accent);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  border-radius: 50px;
+  box-shadow: 0 10px 30px var(--accent-glow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.cta-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(255, 51, 51, 0.5);
+}
+
+/* Image-backed slides — full-bleed bg with dark gradient */
+.slide.image-bg {
+  background: var(--black);
+}
+.slide.image-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+.slide.image-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.78) 35%, rgba(20,2,5,0.55) 70%, rgba(20,2,5,0.25) 100%);
+  z-index: 0;
+}
+.slide.image-bg > * { position: relative; z-index: 1; }
+
+.slide.image-bg.bg-collab::before {
+  background-image: url('https://res.cloudinary.com/dkl8kiemy/image/upload/colaboration_e8adsi.png');
+  background-position: 70% 50%;
+}
+.slide.image-bg.bg-standout::before {
+  background-image: url('https://res.cloudinary.com/dkl8kiemy/image/upload/standout_wbxsly.png');
+}
+
+/* Section label — sharper red border */
+.section-label {
+  border-color: var(--accent);
+  background: rgba(255, 51, 51, 0.08);
+}
+
+/* Quote — wider hit, bolder italic */
+.quote {
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-style: normal;
+  position: relative;
+  padding-left: 2rem;
+}
+
+/* Client logo strip on title slide */
+.client-logos-strip {
+  margin-top: 1.8rem;
+  max-width: 640px;
+  width: 80%;
+  max-height: clamp(36px, 5vh, 56px);
+  height: auto;
+  object-fit: contain;
+  object-position: left center;
+  opacity: 0.55;
+  filter: grayscale(1) brightness(1.4);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .slide { padding: 4vh 6vw; }
@@ -463,7 +570,8 @@ p, li {
 <div class="deck" id="deck">
 
 <!-- SLIDE 1: TITLE -->
-<div class="slide active" data-slide="0">
+<div class="slide active hero-slide" data-slide="0">
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
   <h1>Redbaez</h1>
   <p class="subtitle">AI Partnership for Creative Agencies</p>
   <div class="streams">
@@ -471,7 +579,7 @@ p, li {
     <span class="stream-pill">Platform</span>
     <span class="stream-pill">Intelligence API</span>
   </div>
-  <p class="client-bar">Working with Mother London, Uncommon Creative, Monigle, Alt-Shift</p>
+  <img class="client-logos-strip" src="https://res.cloudinary.com/dkl8kiemy/image/upload/v1774070479/logos_hv6lpg.png" alt="Mother London, Uncommon Creative Studio, Monigle, Alt-Shift, Emotive">
 </div>
 
 <!-- SLIDE 2: TOM HYDE -->
@@ -524,7 +632,7 @@ p, li {
 </div>
 
 <!-- SLIDE 5: MOTHER LONDON -->
-<div class="slide" data-slide="4">
+<div class="slide image-bg bg-collab" data-slide="4">
   <span class="section-label">Case Study</span>
   <h2>Mother London</h2>
   <p class="subtitle">One of the world's most awarded agencies. 300+ people.</p>
@@ -644,7 +752,7 @@ p, li {
 </div>
 
 <!-- SLIDE 10: HOW AIDEN THINKS -->
-<div class="slide" data-slide="9">
+<div class="slide image-bg bg-standout" data-slide="9">
   <span class="section-label">AIDEN Platform</span>
   <h2>How AIDEN Thinks</h2>
   <div class="quote" style="border-left-color: var(--accent);">
@@ -812,6 +920,9 @@ p, li {
       <p>License creative intelligence for your platform. Contact us for pricing.</p>
     </div>
   </div>
+  <div style="margin: 1.8rem 0 1rem;">
+    <a href="https://aiden.services" class="cta-pill" target="_blank" rel="noopener">Try AIDEN free</a>
+  </div>
   <div class="contact-block">
     <p><span class="name">Tom Hyde</span> | tomh@redbaez.com | +61 403 920 369</p>
     <p><span class="name">Chris Maples</span> | chrism@redbaez.com | UK/EU</p>
@@ -922,6 +1033,145 @@ p, li {
 
   // Initial state
   progressBar.style.width = (1 / total * 100) + '%';
+})();
+
+// Hero particle canvas (matches redbaez.com)
+(function() {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+  }
+  resize();
+
+  const particles = [];
+  const particleCount = Math.max(180, Math.floor((window.innerWidth * window.innerHeight) / 7000));
+  let animationState = 'randomMotion';
+  let stateTimer = 0;
+  let centerX = canvas.width / 2;
+  let centerY = canvas.height / 2;
+  let explosionForce = 0;
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.z = Math.random() * 200 - 100;
+      this.baseSize = Math.random() * 3 + 1;
+      this.size = this.baseSize;
+      this.baseSpeed = Math.random() * 0.5 - 0.25;
+      this.speedX = this.baseSpeed;
+      this.speedY = this.baseSpeed;
+      this.speedZ = this.baseSpeed;
+      const g = Math.floor(Math.random() * 51) + 51;
+      const b = Math.floor(Math.random() * 51) + 51;
+      const a = Math.random() * 0.5 + 0.3;
+      this.color = 'rgba(255,' + g + ',' + b + ',' + a + ')';
+    }
+    update(progress) {
+      switch (animationState) {
+        case 'randomMotion':
+          this.x += this.speedX; this.y += this.speedY; this.z += this.speedZ;
+          if (Math.random() < 0.05) {
+            this.speedX = this.baseSpeed * (Math.random() * 2 - 1);
+            this.speedY = this.baseSpeed * (Math.random() * 2 - 1);
+            this.speedZ = this.baseSpeed * (Math.random() * 2 - 1);
+          }
+          break;
+        case 'gravityCollapse': {
+          const dx = centerX - this.x, dy = centerY - this.y, dz = -this.z;
+          const distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          const force = 0.5 / (distance + 1);
+          this.speedX += dx * force * 0.01 * (1 + progress * 2);
+          this.speedY += dy * force * 0.01 * (1 + progress * 2);
+          this.speedZ += dz * force * 0.01 * (1 + progress * 2);
+          this.speedX += (Math.random() - 0.5) * 0.2;
+          this.speedY += (Math.random() - 0.5) * 0.2;
+          const speed = Math.sqrt(this.speedX*this.speedX + this.speedY*this.speedY + this.speedZ*this.speedZ);
+          if (speed > 3) {
+            this.speedX = (this.speedX / speed) * 3;
+            this.speedY = (this.speedY / speed) * 3;
+            this.speedZ = (this.speedZ / speed) * 3;
+          }
+          this.x += this.speedX; this.y += this.speedY; this.z += this.speedZ;
+          break;
+        }
+        case 'stableStar':
+          this.x += (Math.random() - 0.5) * 0.5;
+          this.y += (Math.random() - 0.5) * 0.5;
+          this.z += (Math.random() - 0.5) * 0.5;
+          break;
+        case 'explode': {
+          const dx = this.x - centerX, dy = this.y - centerY, dz = this.z;
+          const distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          const f = explosionForce / (distance + 1);
+          this.speedX += dx * f; this.speedY += dy * f; this.speedZ += dz * f;
+          this.x += this.speedX; this.y += this.speedY; this.z += this.speedZ;
+          break;
+        }
+      }
+      const depthFactor = (this.z + 100) / 200;
+      this.size = this.baseSize * (0.5 + depthFactor);
+      if (this.x < 0) this.x = canvas.width;
+      if (this.x > canvas.width) this.x = 0;
+      if (this.y < 0) this.y = canvas.height;
+      if (this.y > canvas.height) this.y = 0;
+      if (this.z < -100) this.z = 100;
+      if (this.z > 100) this.z = -100;
+    }
+    draw() {
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function calcCenter() {
+    let tx = 0, ty = 0;
+    particles.forEach(p => { tx += p.x; ty += p.y; });
+    centerX = tx / particles.length;
+    centerY = ty / particles.length;
+  }
+
+  for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+  function animate(ts) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const elapsed = ts - stateTimer;
+    let progress = 0;
+    switch (animationState) {
+      case 'randomMotion':
+        if (elapsed > 3000) { animationState = 'gravityCollapse'; stateTimer = ts; }
+        break;
+      case 'gravityCollapse':
+        progress = Math.min(1, elapsed / 5000);
+        calcCenter();
+        if (elapsed >= 5000) { animationState = 'stableStar'; stateTimer = ts; }
+        break;
+      case 'stableStar':
+        if (elapsed > 2000) { animationState = 'explode'; stateTimer = ts; explosionForce = 0; }
+        break;
+      case 'explode':
+        explosionForce = Math.min(3, elapsed / 300);
+        if (elapsed > 2000) { animationState = 'randomMotion'; stateTimer = ts; explosionForce = 0; }
+        break;
+    }
+    particles.sort((a, b) => b.z - a.z);
+    for (const p of particles) { p.update(progress); p.draw(); }
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+
+  window.addEventListener('resize', () => {
+    resize();
+    centerX = canvas.width / 2;
+    centerY = canvas.height / 2;
+  });
 })();
 </script>
 
