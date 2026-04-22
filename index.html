@@ -117,16 +117,59 @@ html, body {
   color: var(--accent);
 }
 
-/* Progress Bar */
-.progress-bar {
+/* Progress Nav — clickable per-slide segments */
+.progress-nav {
   position: fixed;
   top: 0;
   left: 0;
-  height: 3px;
-  background: var(--accent);
-  transition: width 0.4s ease;
+  right: 0;
+  height: 6px;
+  display: flex;
+  gap: 2px;
+  padding: 0 2px;
+  background: rgba(0, 0, 0, 0.3);
   z-index: 100;
+  transition: height 0.2s ease;
 }
+.progress-nav:hover { height: 10px; }
+
+.progress-tick {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease;
+}
+.progress-tick:hover { background: rgba(255, 51, 51, 0.5); }
+.progress-tick.visited { background: rgba(255, 51, 51, 0.45); }
+.progress-tick.current { background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+
+.progress-tick .tick-label {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--black);
+  color: var(--white);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.4rem 0.7rem;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 51, 51, 0.4);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 101;
+}
+.progress-tick:hover .tick-label { opacity: 1; }
+
+.progress-tick:first-child .tick-label { left: 0; transform: translateX(0); }
+.progress-tick:last-child .tick-label { left: auto; right: 0; transform: translateX(0); }
 
 /* Typography — matches redbaez.com */
 h1 {
@@ -575,7 +618,7 @@ p, li {
 </head>
 <body>
 
-<div class="progress-bar" id="progressBar"></div>
+<nav class="progress-nav" id="progressNav" aria-label="Slide navigation"></nav>
 
 <div class="deck" id="deck">
 
@@ -959,11 +1002,61 @@ p, li {
 
   const currentEl = document.getElementById('currentSlide');
   const totalEl = document.getElementById('totalSlides');
-  const progressBar = document.getElementById('progressBar');
+  const progressNav = document.getElementById('progressNav');
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
 
   totalEl.textContent = total;
+
+  // Slide labels for hover tooltips
+  const slideLabels = [
+    'Redbaez',
+    'Tom Hyde',
+    'Three Streams',
+    'Consulting',
+    'Mother London',
+    'Uncommon Creative',
+    'Alt-Shift',
+    'AIDEN Platform',
+    'The 10 Tools',
+    'How AIDEN Thinks',
+    'Monigle',
+    'Messy Data',
+    'Brain API',
+    'What It Does',
+    'Springboards.ai',
+    'Integration',
+    'The Numbers',
+    'Get In Touch'
+  ];
+
+  // Build per-slide ticks
+  const ticks = [];
+  for (let i = 0; i < total; i++) {
+    const tick = document.createElement('button');
+    tick.className = 'progress-tick';
+    tick.type = 'button';
+    tick.setAttribute('aria-label', 'Go to slide ' + (i + 1) + ': ' + (slideLabels[i] || ''));
+    tick.dataset.slide = i;
+    const label = document.createElement('span');
+    label.className = 'tick-label';
+    label.textContent = (i + 1) + '. ' + (slideLabels[i] || 'Slide ' + (i + 1));
+    tick.appendChild(label);
+    tick.addEventListener('click', function(e) {
+      e.stopPropagation();
+      goTo(i);
+    });
+    progressNav.appendChild(tick);
+    ticks.push(tick);
+  }
+
+  function updateTicks() {
+    ticks.forEach(function(t, i) {
+      t.classList.toggle('current', i === current);
+      t.classList.toggle('visited', i < current);
+    });
+  }
+  updateTicks();
 
   function goTo(index) {
     if (isAnimating || index === current || index < 0 || index >= total) return;
@@ -984,7 +1077,7 @@ p, li {
 
     current = index;
     currentEl.textContent = current + 1;
-    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    updateTicks();
 
     setTimeout(function() {
       isAnimating = false;
@@ -1041,8 +1134,6 @@ p, li {
     else prev();
   });
 
-  // Initial state
-  progressBar.style.width = (1 / total * 100) + '%';
 })();
 
 // Hero particle canvas (matches redbaez.com)
