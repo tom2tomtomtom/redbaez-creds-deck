@@ -300,6 +300,29 @@ p, li {
   display: block;
 }
 
+/* Quote Wall (testimonials slide) */
+.quote-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.1rem;
+  margin: 1.2rem 0;
+}
+
+.quote-wall .quote {
+  background: var(--grey-900);
+  border: 1px solid #222;
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 1.1rem 1.3rem;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .quote-wall { grid-template-columns: 1fr; }
+  .quote-wall .quote { font-size: 0.9rem; padding: 1rem 1.1rem; }
+}
+
 /* Product Grid */
 .product-grid {
   display: grid;
@@ -703,22 +726,26 @@ p, li {
   <p class="dim" style="margin-top:1.2rem; font-size:0.95rem;">Based in London. Leads Redbaez UK + EU.</p>
 </div>
 
-<!-- SLIDE 4: THREE STREAMS -->
+<!-- SLIDE 4: FOUR STREAMS -->
 <div class="slide" data-slide="3">
   <span class="section-label">What We Offer</span>
-  <h2>Three Product Streams</h2>
+  <h2>Four Product Streams</h2>
   <div class="three-cols">
     <div class="col">
       <h3>Stream 1: Consulting</h3>
-      <p>Embed AI into how your agency actually works. Four-month partnerships. 110+ custom tools built and deployed across five agencies.</p>
+      <p>Embed AI into how your agency or consultancy actually works. Four-month partnerships. 130+ custom tools built and deployed across six firms.</p>
     </div>
     <div class="col">
       <h3>Stream 2: AIDEN Platform</h3>
-      <p>10 AI tools for creative agencies. One token balance. Try any of them free at aiden.services.</p>
+      <p>10 AI tools for creative work. One token balance. Try any of them free at aiden.services.</p>
     </div>
     <div class="col">
       <h3>Stream 3: Brain API</h3>
       <p>License creative intelligence for your platform. 400+ phantom memories. The prefrontal cortex for LLMs.</p>
+    </div>
+    <div class="col">
+      <h3>Stream 4: Productised Capabilities</h3>
+      <p>Colleague AI Assistant, daily automation routines, voice integration. Capability transfer per seat, not service contracts.</p>
     </div>
   </div>
 </div>
@@ -750,8 +777,24 @@ p, li {
   </ul>
 </div>
 
-<!-- SLIDE 6: UNCOMMON CREATIVE -->
+<!-- SLIDE: COLLINSON GROUP -->
 <div class="slide" data-slide="5">
+  <span class="section-label">Case Study</span>
+  <h2>Collinson Group</h2>
+  <p class="subtitle">Global loyalty consultancy. Salesforce Loyalty partnership. Owners of Priority Pass and Valuedynamx.</p>
+  <ul class="bullets">
+    <li><strong>Loyalty GTM Automation:</strong> end-to-end pipeline from inbound signal to drafted proposal, embedded in the BD team's daily workflow.</li>
+    <li><strong>Signal Intelligence:</strong> 15&ndash;20 defined signal types scanned daily across a 32,000-company universe. Ranked alerts with hook angle and suggested decision-maker.</li>
+    <li><strong>Loyalty Health Check:</strong> self-serve assessment tool benchmarking against 600+ programmes. Generates inbound enquiries through "healthy tension" with prospects.</li>
+    <li><strong>Proposal Knowledge Base:</strong> RAG across historical proposals, pitch decks, and BD emails. Returns the most relevant past work for any new brief.</li>
+    <li><strong>Lead Triage Engine:</strong> top-10 prioritisation per ICP fit. First-touch and follow-up sequences in Collinson voice.</li>
+    <li><strong>Integration:</strong> signal fires &rarr; outreach drafted &rarr; proposal starting point pulled, automatically.</li>
+  </ul>
+  <p class="dim" style="margin-top:1rem; font-size:0.95rem;">12-week embedded delivery. Built around what Collinson already has, not on top of it.</p>
+</div>
+
+<!-- SLIDE 6: UNCOMMON CREATIVE -->
+<div class="slide" data-slide="6">
   <span class="section-label">Case Study</span>
   <h2>Uncommon Creative Studio</h2>
   <p class="subtitle">London's most talked-about agency. BA "A British Original" creators. 223 people. 5 offices (London, New York, Stockholm).</p>
@@ -764,6 +807,24 @@ p, li {
   <div class="quote">
     "I'm in awe of the speed. The issues are getting smaller every day."
     <span class="quote-author">Sian Welsh, Group Director of Financial Operations, Uncommon</span>
+  </div>
+</div>
+
+<!-- SLIDE: ALIEN BABY (IE7) -->
+<div class="slide" data-slide="7">
+  <span class="section-label">Case Study</span>
+  <h2>Alien Baby (IE7)</h2>
+  <p class="subtitle">Idris Elba's creative shop. Eight people, hybrid thinkers. Part of the IE7 Group spanning production, music, brand and entertainment.</p>
+  <ul class="bullets">
+    <li><strong>Six-pillar partnership:</strong> new business, positioning, HR, culture, internal tools, training.</li>
+    <li><strong>Per-person AI rollout:</strong> 1-hour 1:1 sessions, 3 custom skills tailored to each person's role.</li>
+    <li><strong>Dream client list system:</strong> curated brand targeting by category, with bespoke one-pagers per brand.</li>
+    <li><strong>Internal tools menu:</strong> from simple slash-command skills to complex finance reconciliation builds.</li>
+    <li><strong>Creds and proposal polishing:</strong> agency narrative tightened slide by slide, voice consistent across every output.</li>
+  </ul>
+  <div class="quote">
+    "An agency of 8 working like 80."
+    <span class="quote-author">Lucy Murray, Alien Baby</span>
   </div>
 </div>
 
@@ -970,17 +1031,64 @@ p, li {
   <p style="color: var(--grey-400); font-size: 0.95rem;">Python + TypeScript SDKs. Streaming + async. 15-minute integration.</p>
 </div>
 
-<!-- SLIDE 17: THE NUMBERS -->
+<!-- SLIDE: COLLEAGUE AI ASSISTANT -->
 <div class="slide" data-slide="16">
+  <span class="section-label">Stream 4: Productised Capability</span>
+  <h2>Colleague AI Assistant</h2>
+  <p class="subtitle">Give your team the same stack the founders use. Capability transfer, not a service contract.</p>
+  <ul class="bullets">
+    <li>VPS + SSH + Claude Code + Telegram + Obsidian, productised setup.</li>
+    <li>30-minute install per person, then hands off to autonomous use.</li>
+    <li>Personal vault scaffolded automatically from the user's own Gmail, Drive, and calendar.</li>
+    <li>Telegram channel: AI assistant accessible from anywhere, no laptop required.</li>
+    <li>In production with founders, directors, and BD partners across multiple firms.</li>
+  </ul>
+  <div class="divider"></div>
+  <p style="font-size: clamp(1rem, 1.6vw, 1.2rem); color: var(--white); font-weight: 600;">It is not a tool. It is a colleague.</p>
+  <p style="color: var(--grey-400); font-size: 0.95rem;">Lives where the user lives. Works while they sleep.</p>
+</div>
+
+<!-- SLIDE: DAILY AUTOMATION ROUTINES -->
+<div class="slide" data-slide="17">
+  <span class="section-label">Stream 4: Productised Capability</span>
+  <h2>Daily Automation Routines</h2>
+  <p class="subtitle">Augment an executive without replacing them. Six scheduled routines that run while you sleep.</p>
+  <ul class="bullets">
+    <li><strong>Morning briefing:</strong> overnight inbox triaged, today's calendar with pre-meeting briefs from 60 days of email history per attendee, deals gone quiet, sent-mail audit.</li>
+    <li><strong>Auto-chase drafts:</strong> silent threads &gt;5 days get a chase email queued in your drafts folder, ready to review.</li>
+    <li><strong>End-of-day summary:</strong> what shipped, what landed, commitments to track.</li>
+    <li><strong>Sunday weekly review:</strong> what shipped, what stalled, top 3 next week.</li>
+    <li><strong>Nightly vault sync:</strong> Gmail, Drive, and local computer scanned, second brain updated, screenshots OCR'd.</li>
+    <li><strong>Weekly vault hygiene:</strong> duplicate detection, broken links, stale notes flagged.</li>
+  </ul>
+  <p style="font-size: clamp(1rem, 1.6vw, 1.2rem); color: var(--white); font-weight: 600; margin-top: 1rem;">Time at a desk drops. Output goes up.</p>
+</div>
+
+<!-- SLIDE: VOICE INTEGRATION -->
+<div class="slide" data-slide="18">
+  <span class="section-label">Stream 4: Productised Capability</span>
+  <h2>Voice Integration</h2>
+  <p class="subtitle">Speak to your assistant. It speaks back.</p>
+  <ul class="bullets">
+    <li>Voice notes in via Telegram &rarr; Whisper transcription &rarr; Claude responds in context.</li>
+    <li>Replies as voice notes via ElevenLabs or OpenAI TTS.</li>
+    <li>For executives who think out loud, drive often, or work mobile-first.</li>
+    <li>Same vault, same routines, same memory. Just hands-free.</li>
+  </ul>
+  <p style="font-size: clamp(1rem, 1.6vw, 1.2rem); color: var(--white); font-weight: 600; margin-top: 1rem;">Hands-free leadership.</p>
+</div>
+
+<!-- SLIDE 17: THE NUMBERS -->
+<div class="slide" data-slide="19">
   <span class="section-label">Results</span>
   <h2>The Numbers</h2>
   <div class="stat-grid">
     <div class="stat">
-      <div class="number">5</div>
+      <div class="number">6</div>
       <div class="label">enterprise clients across UK, US, Australia</div>
     </div>
     <div class="stat">
-      <div class="number">110+</div>
+      <div class="number">130+</div>
       <div class="label">custom tools in production</div>
     </div>
     <div class="stat">
@@ -1006,15 +1114,47 @@ p, li {
   </div>
 </div>
 
+<!-- SLIDE: TESTIMONIALS -->
+<div class="slide" data-slide="20">
+  <span class="section-label">In Their Words</span>
+  <h2>What Clients Say</h2>
+  <div class="quote-wall">
+    <div class="quote">
+      "Tommy has been of monumental support to us. He speaks plain English."
+      <span class="quote-author">David Pomfret, Chief Transformation Officer, Uncommon Creative Studio</span>
+    </div>
+    <div class="quote">
+      "I'm in awe of the speed."
+      <span class="quote-author">Sian Welsh, Group Director of Financial Operations, Uncommon</span>
+    </div>
+    <div class="quote">
+      "Tom has helped embed AI into our processes and culture, helping Monigle be on the leading edge in a fast-moving space."
+      <span class="quote-author">Gunnar Jacobs, Principal, Monigle</span>
+    </div>
+    <div class="quote">
+      "If it improves quality, then everyone wins."
+      <span class="quote-author">Pip Bingemann, CEO, Springboards.ai</span>
+    </div>
+    <div class="quote">
+      "An agency of 8 working like 80."
+      <span class="quote-author">Lucy Murray, Alien Baby</span>
+    </div>
+    <div class="quote">
+      "AIDEN brings something rare to creative partnerships. Genuine creative judgement and the confidence to defend it."
+      <span class="quote-author">Agency CEO</span>
+    </div>
+  </div>
+</div>
+
 <!-- SLIDE 19: CTA -->
-<div class="slide brain-bg" data-slide="18">
+<div class="slide brain-bg" data-slide="21">
   <canvas class="brain-canvas" id="brainCanvas"></canvas>
-  <h2>Three Ways to Work With Us</h2>
+  <h2>Four Ways to Work With Us</h2>
   <div class="cta-grid">
     <div class="cta-card">
       <div class="step">Option 1</div>
       <h3>Consulting</h3>
-      <p>Embed AI in your agency. From GBP 68K year one. Four-month partnership, production tools from day one.</p>
+      <p>Embed AI in your firm. Four-month partnership, production tools from day one. Pricing on request.</p>
     </div>
     <div class="cta-card">
       <div class="step">Option 2</div>
@@ -1024,7 +1164,12 @@ p, li {
     <div class="cta-card">
       <div class="step">Option 3</div>
       <h3>Brain API</h3>
-      <p>License creative intelligence for your platform. Contact us for pricing.</p>
+      <p>License creative intelligence for your platform. Contact us.</p>
+    </div>
+    <div class="cta-card">
+      <div class="step">Option 4</div>
+      <h3>Productised Capabilities</h3>
+      <p>Colleague AI Assistant, daily automation, voice. Capability transfer per seat.</p>
     </div>
   </div>
   <div style="margin: 1.8rem 0 1rem;">
@@ -1044,7 +1189,7 @@ p, li {
   <button id="nextBtn" aria-label="Next slide">&#8594;</button>
 </div>
 <div class="slide-counter">
-  <span class="current" id="currentSlide">1</span> / <span id="totalSlides">18</span>
+  <span class="current" id="currentSlide">1</span> / <span id="totalSlides">25</span>
 </div>
 
 <script>
@@ -1067,10 +1212,12 @@ p, li {
     'Redbaez',
     'Tom Hyde',
     'Chris Maples',
-    'Three Streams',
+    'Four Streams',
     'Consulting',
     'Mother London',
+    'Collinson Group',
     'Uncommon Creative',
+    'Alien Baby (IE7)',
     'Alt-Shift',
     'AIDEN Platform',
     'The 10 Tools',
@@ -1081,7 +1228,11 @@ p, li {
     'What It Does',
     'Springboards.ai',
     'Integration',
+    'Colleague AI',
+    'Daily Automation',
+    'Voice',
     'The Numbers',
+    'Testimonials',
     'Get In Touch'
   ];
 
